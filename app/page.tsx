@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Star, Users, Download } from "lucide-react"
 import Link from "next/link"
 import { TemplatePreview } from "@/components/template-preview"
+import AdsByGoogle from "@/components/adsbygoogle";
 
 const templates = [
   {
@@ -170,7 +171,7 @@ export default function HomePage() {
                 <span className="text-white font-bold text-sm">CV</span>
               </div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CV Generator Pro
+                CV Generator by Muhammad Fikri
               </h1>
             </div>
             <div className="flex items-center space-x-4">
@@ -194,6 +195,8 @@ export default function HomePage() {
             Buat CV Profesional
             <br />
             dalam Hitungan Menit
+            <br />
+            (web dalam masa pengembangan)
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Pilih dari 20+ template profesional, isi data Anda, dan dapatkan CV siap kerja dalam format PDF. Tanpa
@@ -217,12 +220,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Google Ads Placeholder */}
+      {/* Google Ads Section */}
       <div className="container mx-auto px-4 mb-12">
-        <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-          <p className="text-gray-500 text-sm">Google Ads Placement</p>
-          <p className="text-gray-400 text-xs mt-1">728x90 Leaderboard</p>
-        </div>
+        <AdsByGoogle />
       </div>
 
       {/* Template Selection */}
@@ -328,10 +328,10 @@ export default function HomePage() {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">CV</span>
             </div>
-            <h1 className="text-xl font-bold">CV Generator Pro</h1>
+            <h1 className="text-xl font-bold">CV Generator</h1>
           </div>
           <p className="text-gray-400 mb-4">Buat CV profesional dengan mudah dan gratis</p>
-          <p className="text-gray-500 text-sm">© 2024 CV Generator Pro. All rights reserved.</p>
+          <p className="text-gray-500 text-sm">©2025 CV Generator. All rights reserved.</p>
         </div>
       </footer>
     </div>
