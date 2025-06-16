@@ -11,7 +11,7 @@ export default function AdsByGoogle() {
           ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
           clearInterval(interval);
         } catch (e) {
-          console.error("Adsense push error:", e);
+          console.error("Adsense push errors:", e);
         }
       }
     }, 300);
