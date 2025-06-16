@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Star, Users, Download } from "lucide-react"
 import Link from "next/link"
 import { TemplatePreview } from "@/components/template-preview"
-import AdsByGoogle from "@/components/adsbygoogle";
+import { GoogleAdSense } from "@/components/google-adsense"
+import Script from "next/script"
 
 const templates = [
   {
@@ -161,179 +162,194 @@ export default function HomePage() {
     selectedCategory === "All" ? templates : templates.filter((t) => t.category === selectedCategory)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+    <>
+      {/* Google AdSense Script */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4642094843478665"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        {/* Header */}
+        <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">CV</span>
+                </div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  CV Generator Pro
+                </h1>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-1 text-sm text-gray-600">
+                  <Users className="w-4 h-4" />
+                  <span>10,000+ CV dibuat</span>
+                </div>
+                <div className="flex items-center space-x-1 text-sm text-gray-600">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span>4.9/5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="py-16 text-center">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Buat CV Profesional
+              <br />
+              dalam Hitungan Menit
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              Pilih dari 20+ template profesional, isi data Anda, dan dapatkan CV siap kerja dalam format PDF. Tanpa
+              registrasi, 100% gratis!
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              <Badge variant="secondary" className="px-4 py-2">
+                <Download className="w-4 h-4 mr-2" />
+                Export PDF Gratis
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2">
+                ⚡ Live Preview Real-Time
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2">
+                🎨 20+ Template Profesional
+              </Badge>
+              <Badge variant="secondary" className="px-4 py-2">
+                📱 Responsive Design
+              </Badge>
+            </div>
+          </div>
+        </section>
+
+        {/* Google Ads - Leaderboard */}
+        <div className="container mx-auto px-4 mb-12">
+          <div className="flex justify-center">
+            <GoogleAdSense
+              slot="9005745527"
+              style={{ display: "block", minHeight: "90px", width: "100%", maxWidth: "728px" }}
+            />
+          </div>
+        </div>
+
+        {/* Template Selection */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <h3 className="text-3xl font-bold text-center mb-12">Pilih Template CV Anda</h3>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category)}
+                  className="rounded-full"
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
+
+            {/* Templates Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredTemplates.map((template) => (
+                <Card
+                  key={template.id}
+                  className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-300"
+                >
+                  <CardContent className="p-0">
+                    {/* A4 aspect ratio container with better scaling */}
+                    <div className="aspect-[210/297] overflow-hidden rounded-t-lg relative bg-white">
+                      {/* Show actual template preview with improved scaling to fill width */}
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="transform scale-[0.42] origin-center w-[210mm] h-[297mm]">
+                          <TemplatePreview templateId={template.id.toString()} />
+                        </div>
+                      </div>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-t-lg"></div>
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-gray-900">{template.name}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {template.category}
+                        </Badge>
+                      </div>
+                      <Link href={`/editor?template=${template.id}`}>
+                        <Button className="w-full group-hover:bg-blue-600 transition-colors">
+                          Pilih Template
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <h3 className="text-3xl font-bold text-center mb-12">Mengapa Pilih CV Generator Pro?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">⚡</span>
+                </div>
+                <h4 className="text-xl font-semibold mb-2">Super Cepat</h4>
+                <p className="text-gray-600">Buat CV profesional dalam hitungan menit dengan live preview real-time</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🎨</span>
+                </div>
+                <h4 className="text-xl font-semibold mb-2">Design Profesional</h4>
+                <p className="text-gray-600">20+ template yang dirancang khusus untuk berbagai profesi dan industri</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">📄</span>
+                </div>
+                <h4 className="text-xl font-semibold mb-2">Export PDF</h4>
+                <p className="text-gray-600">Download CV dalam format PDF berkualitas tinggi, siap untuk dikirim</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Google Ads - Leaderboard Bottom */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-center">
+            <GoogleAdSense
+              slot="9005745527"
+              style={{ display: "block", minHeight: "90px", width: "100%", maxWidth: "728px" }}
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-12">
+          <div className="container mx-auto px-4 text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CV</span>
               </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                CV Generator by Muhammad Fikri
-              </h1>
+              <h1 className="text-xl font-bold">CV Generator Pro</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <Users className="w-4 h-4" />
-                <span>10,000+ CV dibuat</span>
-              </div>
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                <span>4.9/5</span>
-              </div>
-            </div>
+            <p className="text-gray-400 mb-4">Buat CV profesional dengan mudah dan gratis</p>
+            <p className="text-gray-500 text-sm">© 2024 CV Generator Pro. All rights reserved.</p>
           </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="py-16 text-center">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Buat CV Profesional
-            <br />
-            dalam Hitungan Menit
-            <br />
-            (web dalam masa pengembangan)
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Pilih dari 20+ template profesional, isi data Anda, dan dapatkan CV siap kerja dalam format PDF. Tanpa
-            registrasi, 100% gratis!
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <Badge variant="secondary" className="px-4 py-2">
-              <Download className="w-4 h-4 mr-2" />
-              Export PDF Gratis
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
-              ⚡ Live Preview Real-Time
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
-              🎨 20+ Template Profesional
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2">
-              📱 Responsive Design
-            </Badge>
-          </div>
-        </div>
-      </section>
-
-      {/* Google Ads Section */}
-      <div className="container mx-auto px-4 mb-12">
-        <AdsByGoogle />
+        </footer>
       </div>
-
-      {/* Template Selection */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Pilih Template CV Anda</h3>
-
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className="rounded-full"
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-
-          {/* Templates Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredTemplates.map((template) => (
-              <Card
-                key={template.id}
-                className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-blue-300"
-              >
-                <CardContent className="p-0">
-                  {/* A4 aspect ratio container with better scaling */}
-                  <div className="aspect-[210/297] overflow-hidden rounded-t-lg relative bg-white">
-                    {/* Show actual template preview with improved scaling to fill width */}
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="transform scale-[0.42] origin-center w-[210mm] h-[297mm]">
-                        <TemplatePreview templateId={template.id.toString()} />
-                      </div>
-                    </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-t-lg"></div>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-gray-900">{template.name}</h4>
-                      <Badge variant="outline" className="text-xs">
-                        {template.category}
-                      </Badge>
-                    </div>
-                    <Link href={`/editor?template=${template.id}`}>
-                      <Button className="w-full group-hover:bg-blue-600 transition-colors">
-                        Pilih Template
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Mengapa Pilih CV Generator Pro?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Super Cepat</h4>
-              <p className="text-gray-600">Buat CV profesional dalam hitungan menit dengan live preview real-time</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎨</span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Design Profesional</h4>
-              <p className="text-gray-600">20+ template yang dirancang khusus untuk berbagai profesi dan industri</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">📄</span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Export PDF</h4>
-              <p className="text-gray-600">Download CV dalam format PDF berkualitas tinggi, siap untuk dikirim</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Google Ads Placeholder */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-          <p className="text-gray-500 text-sm">Google Ads Placement</p>
-          <p className="text-gray-400 text-xs mt-1">728x90 Leaderboard</p>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CV</span>
-            </div>
-            <h1 className="text-xl font-bold">CV Generator</h1>
-          </div>
-          <p className="text-gray-400 mb-4">Buat CV profesional dengan mudah dan gratis</p>
-          <p className="text-gray-500 text-sm">©2025 CV Generator. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+    </>
   )
 }

@@ -21,6 +21,7 @@ import {
   FileText,
 } from "lucide-react"
 import Link from "next/link"
+import Script from "next/script"
 import { PersonalInfoForm } from "@/components/form-sections/personal-info-form"
 import { ExperienceForm } from "@/components/form-sections/experience-form"
 import { EducationForm } from "@/components/form-sections/education-form"
@@ -30,6 +31,7 @@ import { LanguageForm } from "@/components/form-sections/language-form"
 import { HobbiesForm } from "@/components/form-sections/hobbies-form"
 import { ReferenceForm } from "@/components/form-sections/reference-form"
 import { CVPreview } from "@/components/cv-preview"
+import { GoogleAdSense } from "@/components/google-adsense"
 import { useToast } from "@/hooks/use-toast"
 
 export interface CVData {
@@ -234,159 +236,173 @@ function EditorContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Kembali
-                </Button>
-              </Link>
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">CV</span>
+    <>
+      {/* Google AdSense Script */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4642094843478665"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b sticky top-0 z-40">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Link href="/">
+                  <Button variant="ghost" size="sm">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Kembali
+                  </Button>
+                </Link>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">CV</span>
+                  </div>
+                  <h1 className="text-lg font-semibold">CV Editor</h1>
+                  <Badge variant="outline">Template #{templateId}</Badge>
                 </div>
-                <h1 className="text-lg font-semibold">CV Editor</h1>
-                <Badge variant="outline">Template #{templateId}</Badge>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm" onClick={handleReset}>
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reset
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setIsFullscreen(true)}>
+                  <Maximize className="w-4 h-4 mr-2" />
+                  Fullscreen
+                </Button>
+                <Button onClick={handleExportPDF} className="bg-green-600 hover:bg-green-700">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={handleReset}>
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setIsFullscreen(true)}>
-                <Maximize className="w-4 h-4 mr-2" />
-                Fullscreen
-              </Button>
-              <Button onClick={handleExportPDF} className="bg-green-600 hover:bg-green-700">
-                <Download className="w-4 h-4 mr-2" />
-                Export PDF
-              </Button>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-6">
+          {/* Google Ads - Leaderboard */}
+          <div className="flex justify-center mb-6">
+            <GoogleAdSense
+              slot="9005745527"
+              style={{ display: "block", minHeight: "90px", width: "100%", maxWidth: "728px" }}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Form Section */}
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Isi Data CV Anda</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Tabs value={activeTab} onValueChange={setActiveTab}>
+                    <TabsList className="grid grid-cols-4 lg:grid-cols-8 mb-6">
+                      {tabs.map((tab) => {
+                        const Icon = tab.icon
+                        return (
+                          <TabsTrigger key={tab.id} value={tab.id} className="flex flex-col items-center p-2 text-xs">
+                            <Icon className="w-4 h-4 mb-1" />
+                            <span className="hidden sm:inline">{tab.label}</span>
+                          </TabsTrigger>
+                        )
+                      })}
+                    </TabsList>
+
+                    <TabsContent value="personal">
+                      <PersonalInfoForm
+                        data={cvData.personalInfo}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, personalInfo: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="experience">
+                      <ExperienceForm
+                        data={cvData.experience}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, experience: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="education">
+                      <EducationForm
+                        data={cvData.education}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, education: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="skills">
+                      <SkillsForm
+                        data={cvData.skills}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, skills: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="certifications">
+                      <CertificationForm
+                        data={cvData.certifications}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, certifications: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="languages">
+                      <LanguageForm
+                        data={cvData.languages}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, languages: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="hobbies">
+                      <HobbiesForm
+                        data={cvData.hobbies}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, hobbies: data }))}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="references">
+                      <ReferenceForm
+                        data={cvData.references}
+                        onChange={(data) => setCVData((prev) => ({ ...prev, references: data }))}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </div>
-      </header>
 
-      <div className="container mx-auto px-4 py-6">
-        {/* Google Ads Placeholder */}
-        <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center mb-6">
-          <p className="text-gray-500 text-sm">Google Ads Placement</p>
-          <p className="text-gray-400 text-xs mt-1">728x90 Leaderboard</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Form Section */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Isi Data CV Anda</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid grid-cols-4 lg:grid-cols-8 mb-6">
-                    {tabs.map((tab) => {
-                      const Icon = tab.icon
-                      return (
-                        <TabsTrigger key={tab.id} value={tab.id} className="flex flex-col items-center p-2 text-xs">
-                          <Icon className="w-4 h-4 mb-1" />
-                          <span className="hidden sm:inline">{tab.label}</span>
-                        </TabsTrigger>
-                      )
-                    })}
-                  </TabsList>
-
-                  <TabsContent value="personal">
-                    <PersonalInfoForm
-                      data={cvData.personalInfo}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, personalInfo: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="experience">
-                    <ExperienceForm
-                      data={cvData.experience}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, experience: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="education">
-                    <EducationForm
-                      data={cvData.education}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, education: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="skills">
-                    <SkillsForm
-                      data={cvData.skills}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, skills: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="certifications">
-                    <CertificationForm
-                      data={cvData.certifications}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, certifications: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="languages">
-                    <LanguageForm
-                      data={cvData.languages}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, languages: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="hobbies">
-                    <HobbiesForm
-                      data={cvData.hobbies}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, hobbies: data }))}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="references">
-                    <ReferenceForm
-                      data={cvData.references}
-                      onChange={(data) => setCVData((prev) => ({ ...prev, references: data }))}
-                    />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Preview Section */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  Live Preview
-                  <Badge variant="secondary">Real-time</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-2">
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <div className="transform scale-50 origin-top-left w-[200%] h-[200%] overflow-hidden">
-                    <CVPreview data={cvData} templateId={templateId} />
+            {/* Preview Section */}
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    Live Preview
+                    <Badge variant="secondary">Real-time</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-2">
+                  <div className="bg-gray-100 p-4 rounded-lg">
+                    <div className="transform scale-50 origin-top-left w-[200%] h-[200%] overflow-hidden">
+                      <CVPreview data={cvData} templateId={templateId} />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* Google Ads Placeholder */}
-            <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-              <p className="text-gray-500 text-sm">Google Ads Placement</p>
-              <p className="text-gray-400 text-xs mt-1">300x250 Medium Rectangle</p>
+              {/* Google Ads - Medium Rectangle */}
+              <div className="flex justify-center">
+                <GoogleAdSense
+                  slot="9005745527"
+                  style={{ display: "block", minHeight: "250px", width: "100%", maxWidth: "300px" }}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
