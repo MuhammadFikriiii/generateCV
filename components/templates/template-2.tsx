@@ -14,6 +14,17 @@ export function Template2({ data }: Template2Props) {
     return date.toLocaleDateString("id-ID", { year: "numeric", month: "long" })
   }
 
+  const getLanguageLevel = (level: string) => {
+    const levels = {
+      beginner: "Pemula",
+      elementary: "Dasar",
+      intermediate: "Menengah",
+      advanced: "Mahir",
+      native: "Native",
+    }
+    return levels[level as keyof typeof levels] || level
+  }
+
   return (
     <div className="w-[210mm] min-h-[297mm] bg-gray-100 flex font-sans text-sm">
       {/* Left Sidebar */}
@@ -30,7 +41,7 @@ export function Template2({ data }: Template2Props) {
         {/* Name & Title */}
         <div className="text-center mb-6">
           <h2 className="text-xl font-bold">{data.personalInfo.fullName || "MUHAMMAD FIKRI"}</h2>
-          <p className="text-gray-300">{data.personalInfo.jobTitle || "Full Stack Developer"}</p>
+          <p className="text-gray-300">Full Stack Developer</p>
         </div>
 
         {/* Contact Info */}
@@ -54,7 +65,7 @@ export function Template2({ data }: Template2Props) {
               <span>
                 {data.personalInfo.birthPlace && data.personalInfo.birthDate
                   ? `${data.personalInfo.birthPlace}, ${formatDate(data.personalInfo.birthDate)}`
-                  : "Jakarta, Agustus 1995"}
+                  : data.personalInfo.birthPlace || formatDate(data.personalInfo.birthDate) || "Jakarta, Agustus 1995"}
               </span>
             </div>
           </div>
@@ -100,7 +111,7 @@ export function Template2({ data }: Template2Props) {
             ).map((lang) => (
               <div key={lang.id} className="flex justify-between">
                 <span className="text-sm">{lang.name}</span>
-                <span className="text-xs text-gray-400 capitalize">{lang.level}</span>
+                <span className="text-xs text-gray-400">{getLanguageLevel(lang.level)}</span>
               </div>
             ))}
           </div>

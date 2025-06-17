@@ -14,6 +14,17 @@ export function Template5({ data }: Template5Props) {
     return date.toLocaleDateString("id-ID", { year: "numeric", month: "long" })
   }
 
+  const getLanguageLevel = (level: string) => {
+    const levels = {
+      beginner: "Pemula",
+      elementary: "Dasar",
+      intermediate: "Menengah",
+      advanced: "Mahir",
+      native: "Native",
+    }
+    return levels[level as keyof typeof levels] || level
+  }
+
   return (
     <div className="w-[210mm] min-h-[297mm] bg-white font-sans text-sm">
       {/* Header */}
@@ -40,9 +51,7 @@ export function Template5({ data }: Template5Props) {
             <h1 className="text-4xl font-semibold mb-2 tracking-wide">
               {data.personalInfo.fullName || "MUHAMMAD FIKRI"}
             </h1>
-            <h2 className="text-lg font-medium text-gray-200">
-              {data.personalInfo.jobTitle || "Full Stack Developer"}
-            </h2>
+            <h2 className="text-lg font-medium text-gray-200">Full Stack Developer</h2>
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
@@ -61,7 +70,9 @@ export function Template5({ data }: Template5Props) {
                 <span>
                   {data.personalInfo.birthPlace && data.personalInfo.birthDate
                     ? `${data.personalInfo.birthPlace}, ${formatDate(data.personalInfo.birthDate)}`
-                    : "Jakarta, Agustus 1995"}
+                    : data.personalInfo.birthPlace ||
+                      formatDate(data.personalInfo.birthDate) ||
+                      "Jakarta, Agustus 1995"}
                 </span>
               </div>
             </div>
@@ -134,7 +145,7 @@ export function Template5({ data }: Template5Props) {
               ).map((lang) => (
                 <div key={lang.id} className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
                   <span className="font-medium text-gray-800 text-sm">{lang.name}</span>
-                  <span className="text-sm text-indigo-600 font-medium capitalize">{lang.level}</span>
+                  <span className="text-sm text-indigo-600 font-medium">{getLanguageLevel(lang.level)}</span>
                 </div>
               ))}
             </div>

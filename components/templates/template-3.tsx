@@ -14,6 +14,17 @@ export function Template3({ data }: Template3Props) {
     return date.toLocaleDateString("id-ID", { year: "numeric", month: "long" })
   }
 
+  const getLanguageLevel = (level: string) => {
+    const levels = {
+      beginner: "Pemula",
+      elementary: "Dasar",
+      intermediate: "Menengah",
+      advanced: "Mahir",
+      native: "Native",
+    }
+    return levels[level as keyof typeof levels] || level
+  }
+
   return (
     <div className="w-[210mm] min-h-[297mm] bg-white p-6 font-sans text-sm flex flex-col items-center justify-start">
       {/* Header */}
@@ -47,7 +58,7 @@ export function Template3({ data }: Template3Props) {
           <span>
             {data.personalInfo.birthPlace && data.personalInfo.birthDate
               ? `${data.personalInfo.birthPlace}, ${formatDate(data.personalInfo.birthDate)}`
-              : "Jakarta, Agustus 1995"}
+              : data.personalInfo.birthPlace || formatDate(data.personalInfo.birthDate) || "Jakarta, Agustus 1995"}
           </span>
         </div>
       </div>
@@ -181,7 +192,7 @@ export function Template3({ data }: Template3Props) {
             ).map((lang) => (
               <div key={lang.id} className="flex justify-center gap-4">
                 <span className="text-sm text-gray-700">{lang.name}</span>
-                <span className="text-xs text-gray-500 capitalize">{lang.level}</span>
+                <span className="text-xs text-gray-500">{getLanguageLevel(lang.level)}</span>
               </div>
             ))}
           </div>

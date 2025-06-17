@@ -14,6 +14,17 @@ export function Template4({ data }: Template4Props) {
     return date.toLocaleDateString("id-ID", { year: "numeric", month: "long" })
   }
 
+  const getLanguageLevel = (level: string) => {
+    const levels = {
+      beginner: "Pemula",
+      elementary: "Dasar",
+      intermediate: "Menengah",
+      advanced: "Mahir",
+      native: "Native",
+    }
+    return levels[level as keyof typeof levels] || level
+  }
+
   return (
     <div className="w-[210mm] min-h-[297mm] bg-gray-100 font-sans text-sm">
       {/* Header */}
@@ -46,7 +57,9 @@ export function Template4({ data }: Template4Props) {
                 <span>
                   {data.personalInfo.birthPlace && data.personalInfo.birthDate
                     ? `${data.personalInfo.birthPlace}, ${formatDate(data.personalInfo.birthDate)}`
-                    : "Jakarta, Agustus 1995"}
+                    : data.personalInfo.birthPlace ||
+                      formatDate(data.personalInfo.birthDate) ||
+                      "Jakarta, Agustus 1995"}
                 </span>
               </div>
             </div>
@@ -124,7 +137,7 @@ export function Template4({ data }: Template4Props) {
                 ).map((lang) => (
                   <div key={lang.id} className="bg-gray-50 p-3 rounded-lg">
                     <div className="font-medium text-gray-800">{lang.name}</div>
-                    <div className="text-sm text-green-600 capitalize font-medium">{lang.level}</div>
+                    <div className="text-sm text-green-600 capitalize font-medium">{getLanguageLevel(lang.level)}</div>
                   </div>
                 ))}
               </div>

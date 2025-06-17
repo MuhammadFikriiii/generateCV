@@ -4,7 +4,7 @@ import Script from "next/script"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "CV Generator Pro - Buat CV Profesional Gratis",
+  title: "CV Generator",
   description:
     "Buat CV profesional dengan 20+ template gratis. Export PDF langsung, live preview real-time. Tanpa registrasi!",
   keywords: "cv generator, resume builder, template cv, buat cv online, cv gratis, template resume",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   publisher: "CV Generator Pro",
   robots: "index, follow",
   openGraph: {
-    title: "CV Generator Pro - Buat CV Profesional Gratis",
+    title: "CV Generator",
     description: "Buat CV profesional dengan 20+ template gratis. Export PDF langsung, live preview real-time.",
     type: "website",
     locale: "id_ID",

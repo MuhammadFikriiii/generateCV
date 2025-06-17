@@ -181,7 +181,7 @@ export default function HomePage() {
                   <span className="text-white font-bold text-sm">CV</span>
                 </div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  CV Generator Pro
+                  CV Generator
                 </h1>
               </div>
               <div className="flex items-center space-x-4">
@@ -202,10 +202,11 @@ export default function HomePage() {
         <section className="py-16 text-center">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Buat CV Profesional
+              Buat CV
               <br />
               dalam Hitungan Menit
             </h2>
+             web masih dalam tahap pengembangan maaf kalo masih ada bug❤
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               Pilih dari 20+ template profesional, isi data Anda, dan dapatkan CV siap kerja dalam format PDF. Tanpa
               registrasi, 100% gratis!
